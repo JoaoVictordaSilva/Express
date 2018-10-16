@@ -2,19 +2,20 @@
 
 const Person = use('App/Models/Person')
 /**
- * Resourceful controller for interacting with people
+ * Resourceful controller for interacting with person
  */
 class PersonController {
   /**
-   * Show a list of all people.
-   * GET people
+   * Show a list of all person.
+   * GET person
    */
-  async index({ request, response }) {
+  async index() {
+    return await Person.all();
   }
 
   /**
  * Create/save a new person.
- * POST people
+ * POST person
  */
   async store({ request, response }) {
     const body = request.post();
@@ -24,7 +25,7 @@ class PersonController {
     person.$attributes = {
       ...body
     }
-    
+
     await person.save();
 
     return 'ok'
@@ -32,30 +33,50 @@ class PersonController {
 
   /**
    * Display a single person.
-   * GET people/:id
+   * GET person/:id
    */
   async show({ params, request, response }) {
   }
 
   /**
    * Render a form to update an existing person.
-   * GET people/:id/edit
+   * GET person/:id/edit
    */
-  async edit({ params, request, response, view }) {
+  async edit({ params, request }) {
+
+
+
   }
 
   /**
    * Update person details.
-   * PUT or PATCH people/:id
+   * PUT or PATCH person/:id
    */
-  async update({ params, request, response }) {
+  async update({ params, request }) {
+
+    const body = request.post()
+
+    const person = await Person.find(params.id)
+
+    person.$attributes = {
+      ...person.$attributes,
+      ...body
+    }
+
+    await person.save()
+
+    return 'ok'
   }
 
   /**
    * Delete a person with id.
-   * DELETE people/:id
+   * DELETE person/:id
    */
   async destroy({ params, request, response }) {
+
+    const person = await Person.find(params.id)
+    person.delete();
+
   }
 }
 

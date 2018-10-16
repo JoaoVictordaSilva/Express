@@ -19,5 +19,5 @@ const Database = use('Database')
 
 
 Route.group(() => {
-  Route.resource('person', 'PersonController')
+  Route.resource('person', 'PersonController').apiOnly()
 }).prefix('api')
