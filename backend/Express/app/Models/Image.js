@@ -3,25 +3,20 @@
 const Model = use('Model')
 const scheme = use('Env').get('DB_SCHEMA')
 
-class Address extends Model {
-
-
-    relative () {
-        return this.hasMany('App/Models/Relative')
-    }
+class Image extends Model {
 
     person () {
         return this.hasMany('App/Models/Person')
     }
 
     static get table() {
-        return `${scheme}.address`
+        return `${scheme}.image`
     }
 
     static get primaryKey() {
-        return 'id_address'
+        return 'id_image'
     }
 
 }
 
-module.exports = Address
+module.exports = Image

@@ -4,12 +4,12 @@ const Schema = use('Schema')
 
 class LocationSchema extends Schema {
   up () {
-    this.create('location', (table) => {
+    this.withSchema('express').createTable('location', (table) => {
       table.increments('id_location').primary()
       table.string('nu_latitude').notNullable()
       table.string('nu_longitude').notNullable()
       table.integer('id_person')
-      table.foreign('id_person').references('person.id_person').onUpdate('CASCADE').onDelete('CASCADE')
+      table.foreign('id_person').references('id_person').inTable('express.person').onUpdate('CASCADE').onDelete('CASCADE')
       table.timestamps()
     })
   }

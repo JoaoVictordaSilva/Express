@@ -14,7 +14,10 @@
 */
 
 const Route = use('Route')
+const Addres = use('App/Models/Address')
+const Database = use('Database')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+
+Route.group(() => {
+  Route.resource('person', 'PersonController')
+}).prefix('api')
