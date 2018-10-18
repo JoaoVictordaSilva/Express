@@ -1,7 +1,7 @@
 'use strict'
 
 const Model = use('Model')
-const scheme = use('Env').get('DB_SCHEMA')
+const schema = use('Env').get('DB_SCHEMA')
 
 class Location extends Model {
 
@@ -10,7 +10,7 @@ class Location extends Model {
     }
 
     static get table() {
-        return `${scheme}.location`
+        return `${schema}.location`
     }
     static get primaryKey() {
         return 'id_location'

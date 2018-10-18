@@ -1,25 +1,29 @@
 'use strict'
 
 const Model = use('Model')
-const scheme = use('Env').get('DB_SCHEMA')
+const schema = use('Env').get('DB_SCHEMA')
 
 class Person extends Model {
   
-    address() {
-        return this.hasOne('App/Models/Address')
+    address () {
+        return this.belongsTo('App/Models/Address','id_address')
     }
 
-    image() {
-        return this.hasMany('App/Models/Image')
+    image () {
+        return this.belongsTo('App/Models/Image')
     }
+    
     static get table() {
-        this.test = 'testando';
-        return `${scheme}.person`
+        return `${schema}.person`
     }
 
     static get primaryKey() {
         return 'id_person'
     }
+
+    static get hidden () {
+        return ['id_address']
+      }
 
 }
 

@@ -1,10 +1,9 @@
 'use strict'
 
 const Model = use('Model')
-const scheme = use('Env').get('DB_SCHEMA')
+const schema = use('Env').get('DB_SCHEMA')
 
 class Address extends Model {
-
 
     relative () {
         return this.hasMany('App/Models/Relative')
@@ -15,7 +14,7 @@ class Address extends Model {
     }
 
     static get table() {
-        return `${scheme}.address`
+        return `${schema}.address`
     }
 
     static get primaryKey() {

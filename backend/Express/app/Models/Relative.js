@@ -1,7 +1,7 @@
 'use strict'
 
 const Model = use('Model')
-const scheme = use('Env').get('DB_SCHEMA')
+const schema = use('Env').get('DB_SCHEMA')
 
 class Relative extends Model {
 
@@ -14,7 +14,7 @@ class Relative extends Model {
     }
 
     static get table() {
-        return `${scheme}.relative`
+        return `${schema}.relative`
     }
 
     static get primaryKey() {

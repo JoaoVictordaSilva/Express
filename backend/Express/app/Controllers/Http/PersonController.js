@@ -1,16 +1,19 @@
 'use strict'
 
+const BaseController = use('App/Controllers/Http/BaseController')
 const Person = use('App/Models/Person')
+const Address = use('App/Models/Address')
+
 /**
  * Resourceful controller for interacting with person
  */
-class PersonController {
+class PersonController extends BaseController {
   /**
    * Show a list of all person.
    * GET person
    */
   async index() {
-    return await Person.all();
+    return await Person.query().with('address').fetch()
   }
 
   /**
@@ -18,66 +21,57 @@ class PersonController {
  * POST person
  */
   async store({ request, response }) {
-    const body = request.post();
+    
+    const { address } = request.post()
+    
+    const addressModel = new Address()
 
-    const person = new Person();
+    addressModel.$attributes = {...address}
+    
+    await addressModel.save()
 
-    person.$attributes = {
-      ...body
+    delete request.body.address
+    
+    request.body = {
+      ...request.body,
+      'id_address': addressModel.id_address
     }
 
-    await person.save();
+    return super.save(request, response, new Person())
 
-    return 'ok'
   }
 
   /**
    * Display a single person.
    * GET person/:id
    */
-  async show({ params, request, response }) {
-  }
-
-  /**
-   * Render a form to update an existing person.
-   * GET person/:id/edit
-   */
-  async edit({ params, request }) {
-
-
-
+  async show({ params: { id } }) {
+    return await Person.query()
+      .where('id_person', id)
+      .with('address')
+      .fetch()
   }
 
   /**
    * Update person details.
    * PUT or PATCH person/:id
    */
-  async update({ params, request }) {
+  async update({ request, response, params: { id } }) {
 
-    const body = request.post()
+    return super.update(request, response, Person, id)
 
-    const person = await Person.find(params.id)
-
-    person.$attributes = {
-      ...person.$attributes,
-      ...body
-    }
-
-    await person.save()
-
-    return 'ok'
   }
 
   /**
    * Delete a person with id.
    * DELETE person/:id
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params: { id } }) {
 
-    const person = await Person.find(params.id)
-    person.delete();
+    super.delete(Person, id)
 
   }
+
 }
 
 module.exports = PersonController
