@@ -3,18 +3,19 @@
 const Schema = use('Schema')
 
 class ImageSchema extends Schema {
-  up () {
-    this.withSchema('express').createTable('images', (table) => {
+  up() {
+    this.withSchema('express').createTable('image', (table) => {
       table.increments('id_image').primary()
       table.timestamps()
-      table.string('ds_path').notNullable()
+      table.boolean('is_profile').defaultTo(false)
+      table.string('na_image').notNullable()
       table.integer('id_person').notNullable()
       table.foreign('id_person').references('id_person').inTable('express.person').onUpdate('CASCADE').onDelete('CASCADE')
     })
   }
 
-  down () {
-    this.drop('images')
+  down() {
+    this.drop('image')
   }
 }
 

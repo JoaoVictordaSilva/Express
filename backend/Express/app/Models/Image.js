@@ -6,7 +6,7 @@ const schema = use('Env').get('DB_SCHEMA')
 class Image extends Model {
 
     person () {
-        return this.hasMany('App/Models/Person')
+        return this.belongsTo('App/Models/Person', 'id_person')
     }
 
     static get table() {

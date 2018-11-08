@@ -3,6 +3,7 @@
 const BaseController = use('App/Controllers/Http/BaseController')
 const Person = use('App/Models/Person')
 const Address = use('App/Models/Address')
+const Location = use('App/Models/Location')
 
 /**
  * Resourceful controller for interacting with person
@@ -34,7 +35,7 @@ class PersonController extends BaseController {
     
     request.body = {
       ...request.body,
-      'id_address': addressModel.id_address
+      id_address: addressModel.id_address
     }
 
     return super.save(request, response, new Person())

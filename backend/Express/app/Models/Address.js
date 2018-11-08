@@ -10,7 +10,7 @@ class Address extends Model {
     }
 
     person () {
-        return this.hasMany('App/Models/Person')
+        return this.hasOne('App/Models/Person', 'id_address', 'id_person')
     }
 
     static get table() {

@@ -20,4 +20,5 @@ const Database = use('Database')
 
 Route.group(() => {
   Route.resource('person', 'PersonController').apiOnly()
+  Route.resource('person/:id_person/images', 'ImageController').apiOnly()
 }).prefix('api')

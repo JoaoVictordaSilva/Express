@@ -10,7 +10,7 @@ class Person extends Model {
     }
 
     image () {
-        return this.belongsTo('App/Models/Image')
+        return this.hasMany('App/Models/Image', 'id_person','id_person')
     }
     
     static get table() {
