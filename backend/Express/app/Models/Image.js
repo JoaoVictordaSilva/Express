@@ -5,7 +5,12 @@ const schema = use('Env').get('DB_SCHEMA')
 
 class Image extends Model {
 
-    person () {
+    static boot() {
+        super.boot()
+        this.addHook('afterFetch', 'ImageHook.data')
+    }
+
+    person() {
         return this.belongsTo('App/Models/Person', 'id_person')
     }
 
@@ -16,6 +21,7 @@ class Image extends Model {
     static get primaryKey() {
         return 'id_image'
     }
+
 
 }
 

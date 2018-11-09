@@ -3,7 +3,7 @@
 const BaseController = use('App/Controllers/Http/BaseController')
 const Person = use('App/Models/Person')
 const Image = use('App/Models/Image')
-const Address = use('App/Models/Address')
+const File = use('App/Utils/File')
 const Drive = use('Drive')
 
 
@@ -12,9 +12,12 @@ const Drive = use('Drive')
  */
 class ImageController extends BaseController {
 
-  async index({ }) {
-    return await Image.query()
-      .with('person')
+  async index({ params }) {
+    return await Person.query()
+      .with('images')
+      .where(builder => {
+        builder.where('id_person', '=', params.id_person)
+      })
       .fetch()
   }
   /**
@@ -27,7 +30,7 @@ class ImageController extends BaseController {
 
     const { data, na_image } = request.post()
 
-    await this.readAndCreateFile(data, na_image)
+    await File.readAndCreateFile(data, na_image)
 
     delete request.body.data
 
@@ -43,16 +46,17 @@ class ImageController extends BaseController {
    * Display a single image.
    * GET images/:id
    */
-  async show({ params: { id_person, id } }) {
+  async show({ params: { id_person, id }, response }) {
     await Person.findOrFail(id_person)
-    this.getFile();
-    return await Image.query()
+    const images = await Image.query()
       .where(builder => {
         builder.where('id_person', '=', id_person)
         builder.where('id_image', '=', id)
       })
       .with('person')
       .fetch()
+      
+    return super.show(response, images)
   }
 
   /**
@@ -67,21 +71,8 @@ class ImageController extends BaseController {
         builder.where('id_image', '=', id)
       })
       .fetch()
-      
+
     this.deleteImage(image)
-  }
-
-  async readAndCreateFile(data, imageName) {
-    await Drive.put(`${imageName}`, Buffer.from(data, 'base64'))
-  }
-
-  //Test example
-  async getFile() {
-    if (await Drive.exists('teste.png')) {
-      let result = await Drive.get('teste.png')
-      result = Buffer.from(result.toString('base64'), 'base64')
-      Drive.put('testando 23.png', result)
-    }
   }
 
   async deleteImage(image) {
@@ -90,7 +81,8 @@ class ImageController extends BaseController {
       const imageName = image.na_image
       if (await Drive.exists(imageName)) {
         await Drive.delete(imageName)
-        await Image.find(image.id_image).delete()
+        image = await Image.find(image.id_image)
+        image.delete()
       }
     }
   }

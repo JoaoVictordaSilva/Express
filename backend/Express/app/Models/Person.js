@@ -4,15 +4,15 @@ const Model = use('Model')
 const schema = use('Env').get('DB_SCHEMA')
 
 class Person extends Model {
-  
-    address () {
-        return this.belongsTo('App/Models/Address','id_address')
+
+    address() {
+        return this.belongsTo('App/Models/Address', 'id_address')
     }
 
-    image () {
-        return this.hasMany('App/Models/Image', 'id_person','id_person')
+    images() {
+        return this.hasMany('App/Models/Image', 'id_person', 'id_person')
     }
-    
+
     static get table() {
         return `${schema}.person`
     }
@@ -21,9 +21,9 @@ class Person extends Model {
         return 'id_person'
     }
 
-    static get hidden () {
+    static get hidden() {
         return ['id_address']
-      }
+    }
 
 }
 
