@@ -24,20 +24,14 @@ class ImageController extends BaseController {
    * Create/save a new image.
    * POST images
    */
-  async store({ request, response, params: { id_person } }) {
+  async store({ request, response }) {
 
-    const person = await Person.findOrFail(id_person)
 
     const { data, na_image } = request.post()
 
     await File.readAndCreateFile(data, na_image)
 
     delete request.body.data
-
-    request.body = {
-      ...request.body,
-      id_person: person.id_person
-    }
 
     return super.save(request, response, new Image())
   }
@@ -47,7 +41,6 @@ class ImageController extends BaseController {
    * GET images/:id
    */
   async show({ params: { id_person, id }, response }) {
-    await Person.findOrFail(id_person)
     const images = await Image.query()
       .where(builder => {
         builder.where('id_person', '=', id_person)
@@ -55,7 +48,7 @@ class ImageController extends BaseController {
       })
       .with('person')
       .fetch()
-      
+
     return super.show(response, images)
   }
 
@@ -63,8 +56,7 @@ class ImageController extends BaseController {
   * Delete a image with id.
   * DELETE images/:id
   */
-  async destroy({ params: { id_person, id } }) {
-    await Person.findOrFail(id_person)
+  async destroy({ response, params: { id_person, id } }) {
     let image = await Image.query()
       .where(builder => {
         builder.where('id_person', '=', id_person)
@@ -72,19 +64,18 @@ class ImageController extends BaseController {
       })
       .fetch()
 
-    this.deleteImage(image)
+    return this.deleteImage(response, image)
   }
 
-  async deleteImage(image) {
+  async deleteImage(response, image) {
     if (image) {
       image = image.toJSON()[0]
       const imageName = image.na_image
       if (await Drive.exists(imageName)) {
         await Drive.delete(imageName)
-        image = await Image.find(image.id_image)
-        image.delete()
+        return super.delete(response, Image, image.id_image)
       }
-    }
+    } 
   }
 }
 

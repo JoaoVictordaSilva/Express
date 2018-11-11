@@ -4,7 +4,7 @@ const Schema = use('Schema')
 
 class UserSchema extends Schema {
   up () {
-    this.withSchema('express').createTable('users', (table) => {
+    this.withSchema('express').createTable('user', (table) => {
       table.increments()
       table.string('username', 80).notNullable().unique()
       table.string('email', 254).notNullable().unique()
@@ -14,7 +14,7 @@ class UserSchema extends Schema {
   }
 
   down () {
-    this.drop('users')
+    this.drop('user')
   }
 }
 

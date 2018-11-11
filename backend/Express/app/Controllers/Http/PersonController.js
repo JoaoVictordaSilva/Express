@@ -3,7 +3,6 @@
 const BaseController = use('App/Controllers/Http/BaseController')
 const Person = use('App/Models/Person')
 const Address = use('App/Models/Address')
-const Location = use('App/Models/Location')
 
 /**
  * Resourceful controller for interacting with person
@@ -14,7 +13,12 @@ class PersonController extends BaseController {
    * GET person
    */
   async index() {
-    return await Person.query().with('address').fetch()
+    return await Person.query()
+      .with('address')
+      .with('images', builder => {
+        builder.where('is_profile', true)
+      })
+      .fetch()
   }
 
   /**
@@ -22,21 +26,8 @@ class PersonController extends BaseController {
  * POST person
  */
   async store({ request, response }) {
-    
-    const { address } = request.post()
-    
-    const addressModel = new Address()
 
-    addressModel.$attributes = {...address}
-    
-    await addressModel.save()
-
-    delete request.body.address
-    
-    request.body = {
-      ...request.body,
-      id_address: addressModel.id_address
-    }
+    await this.saveOrUpdateAddress(request)
 
     return super.save(request, response, new Person())
 
@@ -50,6 +41,11 @@ class PersonController extends BaseController {
     return await Person.query()
       .where('id_person', id)
       .with('address')
+      .with('images')
+      .with('locations', builder => {
+        builder.orderBy('created_at', 'desc')
+        builder.limit(10)
+      })
       .fetch()
   }
 
@@ -59,6 +55,8 @@ class PersonController extends BaseController {
    */
   async update({ request, response, params: { id } }) {
 
+    await this.saveOrUpdateAddress(request, id)
+
     return super.update(request, response, Person, id)
 
   }
@@ -67,9 +65,46 @@ class PersonController extends BaseController {
    * Delete a person with id.
    * DELETE person/:id
    */
-  async destroy({ params: { id } }) {
+  async destroy({ response, params: { id } }) {
 
-    super.delete(Person, id)
+    super.delete(response, Person, id)
+
+  }
+
+  async saveOrUpdateAddress(request, idPerson = null) {
+
+    const { address } = request.post()
+
+    let entity;
+
+    if (idPerson) {
+
+      const person = await Person.findOrFail(Number(idPerson))
+
+      entity = await Address.findOrFail(person.id_address)
+
+      entity.$attributes = {
+        ...entity.$attributes,
+        ...address
+      }
+      await entity.save()
+
+    } else {
+
+      entity = new Address()
+
+      entity.$attributes = { ...address }
+
+      await entity.save()
+
+    }
+
+    delete request.body.address
+
+    request.body = {
+      ...request.body,
+      id_address: entity.id_address
+    }
 
   }
 

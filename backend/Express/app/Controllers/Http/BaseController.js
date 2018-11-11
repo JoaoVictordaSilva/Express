@@ -12,7 +12,7 @@ class BaseController {
 
         await model.save();
 
-        this.response(response, 'Registro incluído', model)
+        this.success(response, 'Registro incluído', model)
     }
 
     async update(request, response, staticModel, id) {
@@ -28,27 +28,32 @@ class BaseController {
 
         await model.save()
 
-        this.response(response, 'Registro atualizado', model)
+        this.success(response, 'Registro atualizado', model)
 
     }
 
-    async delete(staticModel, id) {
+    async delete(response, staticModel, id) {
         const model = await staticModel.find(id)
         model.delete();
+        return response.status(200)
     }
 
-    show(response, data) {
+    show(response, data) { 
         if (data.rows.length === 0) {
-            return response.status(204).json()
+            return this.notFount(response)
         }
         return data
     }
 
-    response(response, message, model, status = 200) {
+    success(response, message, model, status = 200) {
         return response.status(status).json({
             message,
             data: model.toJSON()
         })
+    }
+
+    notFount(response) {
+        return response.status(204).json()
     }
 
 }

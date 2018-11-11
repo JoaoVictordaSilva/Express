@@ -20,5 +20,13 @@ const Database = use('Database')
 
 Route.group(() => {
   Route.resource('person', 'PersonController').apiOnly()
-  Route.resource('person/:id_person/images', 'ImageController').apiOnly()
+  Route.resource('person/:id_person/image', 'ImageController').apiOnly().middleware(['auth:jwt','findPerson'])
+  Route.resource('person/:id_person/location', 'LocationController').apiOnly().middleware('findPerson')
+  Route.resource('user', 'UserController').only(['show', 'store', 'update'])
+    .validator(new Map([
+      [['user.store'], ['UserValidator']],
+      [['user.update'], ['UserValidator']]
+    ]))
+  Route.post('session', 'SessionController.create')
+
 }).prefix('api')

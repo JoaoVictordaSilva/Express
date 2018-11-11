@@ -13,16 +13,16 @@ class Person extends Model {
         return this.hasMany('App/Models/Image', 'id_person', 'id_person')
     }
 
+    locations() {
+        return this.hasMany('App/Models/Location', 'id_person', 'id_person')
+    }
+
     static get table() {
         return `${schema}.person`
     }
 
     static get primaryKey() {
         return 'id_person'
-    }
-
-    static get hidden() {
-        return ['id_address']
     }
 
 }

@@ -5,8 +5,8 @@ const schema = use('Env').get('DB_SCHEMA')
 
 class Location extends Model {
 
-    person () {
-        return this.hasMany('App/Models/Person')
+    person() {
+        return this.belongsTo('App/Models/Person', 'id_person')
     }
 
     static get table() {

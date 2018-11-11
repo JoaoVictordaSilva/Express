@@ -4,9 +4,9 @@ const Schema = use('Schema')
 
 class TokensSchema extends Schema {
   up () {
-    this.withSchema('express').createTable('tokens', (table) => {
+    this.withSchema('express').createTable('token', (table) => {
       table.increments()
-      table.integer('user_id').unsigned().references('id').inTable('express.users')
+      table.integer('user_id').unsigned().references('id').inTable('express.user')
       table.string('token', 255).notNullable().unique().index()
       table.string('type', 80).notNullable()
       table.boolean('is_revoked').defaultTo(false)
@@ -15,7 +15,7 @@ class TokensSchema extends Schema {
   }
 
   down () {
-    this.drop('tokens')
+    this.drop('token')
   }
 }
 
