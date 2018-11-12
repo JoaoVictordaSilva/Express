@@ -4,19 +4,20 @@ class UserValidator {
 
   get rules() {
     return {
-      username: 'required',
-      email: 'required|email',
+      username: 'required|unique:express.user,username',
+      email: 'required|email|unique:express.user,email',
       password: 'required'
     }
   }
 
   get messages () {
     return {
-      'username.required': 'You must provide an username.',
-      'email.required': 'You must provide a email address.',
-      'email.email': 'You must provide a valid email address.',
-      'email.unique': 'This email is already registered.',
-      'password.required': 'You must provide a password'
+      'username.required': 'Você precisa fornecer um nome de usuário.',
+      'username.unique': 'Este nome de usuário já está registrado.',
+      'email.required': 'Você precisa fornecer um endereço de email.',
+      'email.email': 'Você precisa fornecer um endereço de email válido.',
+      'email.unique': 'Este email já está registrado.',
+      'password.required': 'Você precisa fornecer uma senha.'
     }
   }
 
