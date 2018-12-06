@@ -14,7 +14,9 @@ class ImageController extends BaseController {
 
   async index({ params }) {
     return await Person.query()
-      .with('images')
+      .with('images', builder => {
+        builder.where('is_profile', true)
+      })
       .where(builder => {
         builder.where('id_person', '=', params.id_person)
       })

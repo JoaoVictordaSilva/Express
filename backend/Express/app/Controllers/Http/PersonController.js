@@ -15,9 +15,7 @@ class PersonController extends BaseController {
   async index() {
     return await Person.query()
       .with('address')
-      .with('images', builder => {
-        builder.where('is_profile', true)
-      })
+      .with('images')
       .fetch()
   }
 
@@ -87,17 +85,16 @@ class PersonController extends BaseController {
         ...entity.$attributes,
         ...address
       }
-      await entity.save()
 
     } else {
 
       entity = new Address()
 
       entity.$attributes = { ...address }
-
-      await entity.save()
-
+      
     }
+    
+    await entity.save()
 
     delete request.body.address
 

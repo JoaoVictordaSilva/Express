@@ -1,0 +1,518 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.19
+-- Dumped by pg_dump version 9.4.19
+-- Started on 2018-12-05 23:02:37
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 8 (class 2615 OID 16394)
+-- Name: express; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA express;
+
+
+ALTER SCHEMA express OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 177 (class 1259 OID 17277)
+-- Name: address; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.address (
+    id_address integer NOT NULL,
+    na_city character varying(255) NOT NULL,
+    na_neighborhood character varying(255),
+    na_uf character varying(255),
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE express.address OWNER TO postgres;
+
+--
+-- TOC entry 176 (class 1259 OID 17275)
+-- Name: address_id_address_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.address_id_address_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.address_id_address_seq OWNER TO postgres;
+
+--
+-- TOC entry 2075 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: address_id_address_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.address_id_address_seq OWNED BY express.address.id_address;
+
+
+--
+-- TOC entry 181 (class 1259 OID 17625)
+-- Name: image; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.image (
+    id_image integer NOT NULL,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    is_profile boolean DEFAULT false,
+    na_image character varying(255) NOT NULL,
+    id_person integer NOT NULL
+);
+
+
+ALTER TABLE express.image OWNER TO postgres;
+
+--
+-- TOC entry 180 (class 1259 OID 17623)
+-- Name: image_id_image_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.image_id_image_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.image_id_image_seq OWNER TO postgres;
+
+--
+-- TOC entry 2076 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: image_id_image_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.image_id_image_seq OWNED BY express.image.id_image;
+
+
+--
+-- TOC entry 185 (class 1259 OID 17695)
+-- Name: location; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.location (
+    id_location integer NOT NULL,
+    nu_latitude character varying(255) NOT NULL,
+    nu_longitude character varying(255) NOT NULL,
+    id_person integer,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE express.location OWNER TO postgres;
+
+--
+-- TOC entry 184 (class 1259 OID 17693)
+-- Name: location_id_location_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.location_id_location_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.location_id_location_seq OWNER TO postgres;
+
+--
+-- TOC entry 2077 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: location_id_location_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.location_id_location_seq OWNED BY express.location.id_location;
+
+
+--
+-- TOC entry 183 (class 1259 OID 17664)
+-- Name: person; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.person (
+    id_person integer NOT NULL,
+    na_person character varying(255) NOT NULL,
+    dt_birthday date NOT NULL,
+    dt_street_time date,
+    id_address integer,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    ds_history text
+);
+
+
+ALTER TABLE express.person OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 17662)
+-- Name: person_id_person_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.person_id_person_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.person_id_person_seq OWNER TO postgres;
+
+--
+-- TOC entry 2078 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: person_id_person_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.person_id_person_seq OWNED BY express.person.id_person;
+
+
+--
+-- TOC entry 179 (class 1259 OID 17408)
+-- Name: relative; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.relative (
+    id integer NOT NULL,
+    na_relative character varying(255) NOT NULL,
+    nu_phone character varying(255) NOT NULL,
+    dt_birthday date NOT NULL,
+    id_person integer,
+    id_address integer,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE express.relative OWNER TO postgres;
+
+--
+-- TOC entry 178 (class 1259 OID 17406)
+-- Name: relative_id_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.relative_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.relative_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2079 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: relative_id_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.relative_id_seq OWNED BY express.relative.id;
+
+
+--
+-- TOC entry 189 (class 1259 OID 17740)
+-- Name: token; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express.token (
+    id integer NOT NULL,
+    user_id integer,
+    token character varying(255) NOT NULL,
+    type character varying(80) NOT NULL,
+    is_revoked boolean DEFAULT false,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE express.token OWNER TO postgres;
+
+--
+-- TOC entry 188 (class 1259 OID 17738)
+-- Name: token_id_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.token_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.token_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2080 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: token_id_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.token_id_seq OWNED BY express.token.id;
+
+
+--
+-- TOC entry 187 (class 1259 OID 17719)
+-- Name: user; Type: TABLE; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE express."user" (
+    id integer NOT NULL,
+    username character varying(80) NOT NULL,
+    email character varying(254) NOT NULL,
+    password character varying(60) NOT NULL,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+
+
+ALTER TABLE express."user" OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 17717)
+-- Name: user_id_seq; Type: SEQUENCE; Schema: express; Owner: postgres
+--
+
+CREATE SEQUENCE express.user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE express.user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2081 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: express; Owner: postgres
+--
+
+ALTER SEQUENCE express.user_id_seq OWNED BY express."user".id;
+
+
+--
+-- TOC entry 1927 (class 2604 OID 17280)
+-- Name: id_address; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.address ALTER COLUMN id_address SET DEFAULT nextval('express.address_id_address_seq'::regclass);
+
+
+--
+-- TOC entry 1929 (class 2604 OID 17628)
+-- Name: id_image; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.image ALTER COLUMN id_image SET DEFAULT nextval('express.image_id_image_seq'::regclass);
+
+
+--
+-- TOC entry 1932 (class 2604 OID 17698)
+-- Name: id_location; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.location ALTER COLUMN id_location SET DEFAULT nextval('express.location_id_location_seq'::regclass);
+
+
+--
+-- TOC entry 1931 (class 2604 OID 17667)
+-- Name: id_person; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.person ALTER COLUMN id_person SET DEFAULT nextval('express.person_id_person_seq'::regclass);
+
+
+--
+-- TOC entry 1928 (class 2604 OID 17411)
+-- Name: id; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.relative ALTER COLUMN id SET DEFAULT nextval('express.relative_id_seq'::regclass);
+
+
+--
+-- TOC entry 1934 (class 2604 OID 17743)
+-- Name: id; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.token ALTER COLUMN id SET DEFAULT nextval('express.token_id_seq'::regclass);
+
+
+--
+-- TOC entry 1933 (class 2604 OID 17722)
+-- Name: id; Type: DEFAULT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express."user" ALTER COLUMN id SET DEFAULT nextval('express.user_id_seq'::regclass);
+
+
+--
+-- TOC entry 1937 (class 2606 OID 17285)
+-- Name: address_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.address
+    ADD CONSTRAINT address_pkey PRIMARY KEY (id_address);
+
+
+--
+-- TOC entry 1941 (class 2606 OID 17631)
+-- Name: image_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.image
+    ADD CONSTRAINT image_pkey PRIMARY KEY (id_image);
+
+
+--
+-- TOC entry 1945 (class 2606 OID 17703)
+-- Name: location_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (id_location);
+
+
+--
+-- TOC entry 1943 (class 2606 OID 17669)
+-- Name: person_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.person
+    ADD CONSTRAINT person_pkey PRIMARY KEY (id_person);
+
+
+--
+-- TOC entry 1939 (class 2606 OID 17416)
+-- Name: relative_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.relative
+    ADD CONSTRAINT relative_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1953 (class 2606 OID 17746)
+-- Name: token_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.token
+    ADD CONSTRAINT token_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1956 (class 2606 OID 17753)
+-- Name: token_token_unique; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express.token
+    ADD CONSTRAINT token_token_unique UNIQUE (token);
+
+
+--
+-- TOC entry 1947 (class 2606 OID 17728)
+-- Name: user_email_unique; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express."user"
+    ADD CONSTRAINT user_email_unique UNIQUE (email);
+
+
+--
+-- TOC entry 1949 (class 2606 OID 17724)
+-- Name: user_pkey; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1951 (class 2606 OID 17726)
+-- Name: user_username_unique; Type: CONSTRAINT; Schema: express; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY express."user"
+    ADD CONSTRAINT user_username_unique UNIQUE (username);
+
+
+--
+-- TOC entry 1954 (class 1259 OID 17754)
+-- Name: token_token_index; Type: INDEX; Schema: express; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX token_token_index ON express.token USING btree (token);
+
+
+--
+-- TOC entry 1959 (class 2606 OID 17704)
+-- Name: location_id_person_foreign; Type: FK CONSTRAINT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.location
+    ADD CONSTRAINT location_id_person_foreign FOREIGN KEY (id_person) REFERENCES express.person(id_person) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 1958 (class 2606 OID 17670)
+-- Name: person_id_address_foreign; Type: FK CONSTRAINT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.person
+    ADD CONSTRAINT person_id_address_foreign FOREIGN KEY (id_address) REFERENCES express.address(id_address) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- TOC entry 1957 (class 2606 OID 17422)
+-- Name: relative_id_address_foreign; Type: FK CONSTRAINT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.relative
+    ADD CONSTRAINT relative_id_address_foreign FOREIGN KEY (id_address) REFERENCES express.address(id_address) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- TOC entry 1960 (class 2606 OID 17747)
+-- Name: token_user_id_foreign; Type: FK CONSTRAINT; Schema: express; Owner: postgres
+--
+
+ALTER TABLE ONLY express.token
+    ADD CONSTRAINT token_user_id_foreign FOREIGN KEY (user_id) REFERENCES express."user"(id);
+
+
+-- Completed on 2018-12-05 23:02:37
+
+--
+-- PostgreSQL database dump complete
+--
+
